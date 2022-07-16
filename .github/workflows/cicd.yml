@@ -13,4 +13,4 @@ jobs:
     with:
       os_version: "ubuntu-20.04"
       working_directory: "./iac/terraform"
-      token: ${{ secrets.GITHUB_TOKEN }}
+      # token: ${{ secrets.GITHUB_TOKEN }}

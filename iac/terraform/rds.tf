@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "rds_mariaquiteria" {
-  source                  = "../"
+  source                  = "github.com/mentoriaiac/iac-modulo-aws-rds.git?ref=v0.1.0"
   subnet_ids              = ["subnet-00825b5be94f27bfe", "subnet-066dc161feeef4a79"]
   proj_name               = "mariaquiteria"
   vpc_id                  = "vpc-07f5d91b4aa236675"
