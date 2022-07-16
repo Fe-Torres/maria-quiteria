@@ -8,39 +8,38 @@ on:
   pull_request:
 
 jobs:
-    jobs_terraform:
-      name: Terraform workflow
-      runs-on: ${{ inputs.os_version }}
-      defaults:
-        run:
-          working-directory: ${{ inputs.working_directory }}
+  name: Terraform workflow
+  runs-on: "ubuntu-20.04"
+  defaults:
+    run:
+      working-directory: "./iac"
 
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
-        - name: Lê versão do Terraform
-          id: tf-version
-          run: |
-            TF_VERSION=$(sed -nr 's/\s*required_version\s+=\s+"(.*)"/\1/p' *.tf)
-            echo "::set-output name=version::$TF_VERSION"
-        - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v1
-          with:
-            terraform_version: ${{ steps.tf-version.outputs.version }}
+    - name: Lê versão do Terraform
+      id: tf-version
+      run: |
+        TF_VERSION=$(sed -nr 's/\s*required_version\s+=\s+"(.*)"/\1/p' *.tf)
+        echo "::set-output name=version::$TF_VERSION"
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ steps.tf-version.outputs.version }}
 
-        - name: Terraform Version
-          run: terraform version
+    - name: Terraform Version
+      run: terraform version
 
-        - name: Terraform Format
-          run: terraform fmt -check -diff
+    - name: Terraform Format
+      run: terraform fmt -check -diff
 
-        - name: Terraform Init
-          run: terraform init
+    - name: Terraform Init
+      run: terraform init
 
-        - name: Terraform Validate
-          run: terraform validate -no-color
+    - name: Terraform Validate
+      run: terraform validate -no-color
 
-        - name: Validação do tfsec
-          run: |
-            docker run --rm -v $PWD:/app -w /app tfsec/tfsec .
+    - name: Validação do tfsec
+      run: |
+        docker run --rm -v $PWD:/app -w /app tfsec/tfsec .
