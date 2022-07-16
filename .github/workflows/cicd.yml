@@ -44,3 +44,11 @@ jobs:
       - name: Validação do tfsec
         run: |
           docker run --rm -v $PWD:/app -w /app tfsec/tfsec .
+  docker:
+    uses: "midgardhero/cicd_centralizado/.github/workflows/docker_build.yaml@pipeline_docker"
+    with:
+      image: fetorreshub/imagem_teste
+      push_image: ${{github.event_name == 'release'}}
+    secrets:
+      docker_user: ${{secrets.DOCKER_LOGIN}}
+      docker_password: ${{secrets.TOKEN_DOCKERHUB}}
